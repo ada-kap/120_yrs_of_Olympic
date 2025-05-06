@@ -170,6 +170,51 @@ are more geographically and economically accessible, and have a longer tradition
 and infrastructure, which limits the number of participating countries and athletes. As a result, the Summer Olympics attract 
 a much broader and more diverse group of athletes from around the world. */
 
-5. How many events are there?
-6. Which countries send the most athletes?
-7. Do countries with the most athletes also win the most medals?
+-- 5. How many events are there?--
+
+select 
+	sport, count(distinct event) as No_of_events_per_sport 
+from athlete_events ae 
+group by 1 with rollup 
+
+/* result: The total number of events is 741. The highest event values are for Athletics and Shooting with 81 and 77 respectively. */
+
+--6. Which countries send the most athletes? -- 
+
+select 
+	NOC, count(distinct id) as how_many
+from athlete_events 
+group by 1
+order by 2 DESC
+limit 10 
+
+/* results: USA sent almost 9k athletes for Olympic games. Among European countries, Great Britain is on first place, with the value of 5,5k. Next are France and Italy. 
+AAmong Asian countries, Japan has sent the most athletes to the Olympics (3.9k). */
+
+--7. Do countries with the most athletes also win the most medals?--
+
+with 
+total_medals AS 
+	(
+	select ae.NOC, count(medal) AS No_of_medals
+	from athlete_events ae  
+	where medal <> 'NA'
+	group by ae.NOC
+	), 
+total_athletes AS 
+	(
+	select ae.NOC, count(distinct id) AS No_athletes
+	from athlete_events ae 
+	group by ae.NOC
+	)
+select 
+	tm.NOC 							AS 'NOC'
+	,tm.No_of_medals 					AS 'No_of_medals'
+	,ROW_NUMBER () over (order by tm.No_of_medals DESC) 	AS Ranking_No_of_medals
+	,ta.No_athletes 					AS 'No_of_athletes'
+	,ROW_NUMBER () over (order by ta.No_athletes DESC) 	AS Ranking_No_of_athletes
+from total_athletes ta 
+right join total_medals tm 
+	on ta.NOC = tm.NOC 
+order by 3
+
