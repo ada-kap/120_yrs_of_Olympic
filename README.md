@@ -43,26 +43,27 @@ This project demonstrates how SQL can be used to explore large historical datase
 
       with 
       total as
-	    (
-    	select 
+	(
+     	select 
              'Year'
-		        ,count(distinct id)                                 AS Total_ath
-	    from athlete_events ae
-	    group by year
-	    ), 
+	     ,count(distinct id)       AS Total_ath
+	from athlete_events ae
+	group by year
+	), 
      female as 
-	    (
-	    select 
-             `Year` 
-		          ,count(distinct id)                               AS Female_ath
-	    from athlete_events ae 
-		  where sex = 'F'
-		  group by `Year`
-	    ) 
+	(
+	select 
+        	`Year` 
+		,count(distinct id)    AS Female_ath
+	from athlete_events ae 
+	where sex = 'F'
+	group by `Year`
+	) 
        select 
-	          t.year													                      AS Year	
-	          ,t.Total_ath 											                    AS Total_athletes
-	          ,COALESCE (f.Female_ath, 0) 							            AS Female_athletes
-          	,COALESCE (round((f.female_ath/t.total_ath)*100, 1), 0) AS Percentage_of_female_athletes from female f 
-	          right join total t 
-	          on f.year = t.year
+		t.year				AS Year	
+	        ,t.Total_ath 			AS Total_athletes
+	        ,COALESCE (f.Female_ath, 0)  	AS Female_athletes
+          	,COALESCE (round((f.female_ath/t.total_ath)*100, 1), 0) AS Percentage_of_female_athletes 
+	from female f 
+	right join total t 
+	on f.year = t.year
