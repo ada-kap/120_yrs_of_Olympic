@@ -21,6 +21,7 @@ total_players_per_season AS
 select *
 from total_players_per_season
 cross join total 
+
 --result: 122 323 athletes. In Winter competitions took part 17 376 athletes, while in summer 105 082 athletes.--
 
 -- 1b. How many players took part in more than 1 competition 
@@ -35,34 +36,43 @@ from
 	) aa
 --result: 53009 athletes took part in more than 1 competition--
 
+--2. How many countries have participated?
+
+
 
 --3. How has the percentage of female athletes changed over time?--
   
-  with 
-      total as
-	      (
-     	  select 
-          'Year'
-	         ,count(distinct id)             AS Total_ath
-	      from athlete_events ae
-	      group by year
-	      ), 
-     female as 
-	      (
-	      select 
+with 
+total AS
+	(
+	select 
+          	'Year'
+	        ,count(distinct id)             AS Total_ath
+	from athlete_events ae
+	group by year
+	), 
+female AS 
+	(
+	select 
         	`Year` 
-		      ,count(distinct id)              AS Female_ath
-	      from athlete_events ae 
-	      where sex = 'F'
-	      group by `Year`
-	      ) 
-       select 
-		        t.year				                  AS Year	
-	          ,t.Total_ath 			              AS Total_athletes
-	          ,COALESCE (f.Female_ath, 0)  	  AS Female_athletes
-          	,COALESCE (round((f.female_ath/t.total_ath)*100, 1), 0) AS Percentage_of_female_athletes 
-	      from female f 
-      	right join total t 
-	      on f.year = t.year
+		,count(distinct id)              AS Female_ath
+	from athlete_events ae 
+	where sex = 'F'
+	group by `Year`
+	) 
+select 
+	t.year				         AS 'Year'	
+	,t.Total_ath 			         AS Total_athletes
+	,COALESCE (f.Female_ath, 0)  	  	 AS Female_athletes
+        ,COALESCE (round((f.female_ath/t.total_ath)*100, 1), 0) AS Percentage_of_female_athletes 
+from female f 
+right join total t 
+on f.year = t.year
+
 --result: Results show a consistent rise in female participation: from just a few percent in the early 20th century to over 45% by 2016.--
 --insight: A clear trend toward gender equality in sports.--
+
+4. Summer vs Winter Olympics – how do they compare?
+5. How many events are there?
+6. Which countries send the most athletes?
+7. Do countries with the most athletes also win the most medals?
