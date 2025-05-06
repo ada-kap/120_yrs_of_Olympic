@@ -22,7 +22,7 @@ select *
 from total_players_per_season
 cross join total 
 
---result: 122 323 athletes. In Winter competitions took part 17 376 athletes, while in summer 105 082 athletes.--
+/* result: 122 323 athletes. In Winter competitions took part 17 376 athletes, while in summer 105 082 athletes.*/
 
 -- 1b. How many players took part in more than 1 competition? --
 select 
@@ -34,7 +34,7 @@ from
 	having count(year) > 1
 	order by id 
 	) aa
---result: 53009 athletes took part in more than 1 competition--
+/* result: 53009 athletes took part in more than 1 competition. */
 
 --2. How many countries have participated?--
 
@@ -42,7 +42,7 @@ select
 	count(distinct NOC) AS No_of_countries  
 from athlete_events ae 
 
---result: 210 countries, with changes over time due to political factors.--
+/* result: 210 countries, with changes over time due to political factors.*/
 
 
 --3. How has the percentage of female athletes changed over time?--
@@ -74,8 +74,9 @@ from female f
 right join total t 
 	on f.year = t.year
 
---result: Results show a consistent rise in female participation: from just a few percent in the early 20th century to over 45% by 2016.--
---insight: A clear trend toward gender equality in sports.--
+/* result: Results show a consistent rise in female participation: from just a few percent in the early 20th century to over 45% by 2016.*/
+
+/* insight: A clear trend toward gender equality in sports.*/
 
 --4. Summer vs Winter Olympics – how do they compare?--
 
@@ -142,7 +143,7 @@ no_of_events AS
 select 	
 	t.season				AS 'Season'
 	,noe.No_of_Olimpic_games		AS 'No_of_Olimpic_games'
-	,t.total_players			AS 'No_of_total_olimpics'		
+	,t.total_players			AS 'No_of_total_athletes'		
 	,COALESCE (f.total_women, 0) 		AS 'No_of_women'
 	,m.total_men				AS 'No_of_men'
 	,dis.No_of_disciplines			AS 'No_of_disciplines'		
@@ -158,6 +159,16 @@ left join countries cou
 	on t.season = cou.season 
 left join no_of_events noe 
 	on t.season = noe.season
+
+/* results: 20 Olympics were held during the winter season. More than 17k athletes took part in from 112 different countries. 
+Almost 5k were women, and ca. 12,4k were men. The winter season consists of 17 different sports.
+29 Olympics were held during the summer season. More than 105k athletes took part in from 210 different countries. 
+28k were women, and almost 177k were men. The winter season consists of 51 different sports. */
+
+/* insight: The Summer Olympic Games are more popular than the Winter Games mainly because they include more disciplines, 
+are more geographically and economically accessible, and have a longer tradition. Winter sports require specific climate conditions 
+and infrastructure, which limits the number of participating countries and athletes. As a result, the Summer Olympics attract 
+a much broader and more diverse group of athletes from around the world. */
 
 5. How many events are there?
 6. Which countries send the most athletes?
