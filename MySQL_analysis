@@ -1,4 +1,42 @@
---How has the percentage of female athletes changed over time?--
+-- 1. How many athletes have competed in the Olympics? --
+with 
+total AS 
+	(
+	select
+		count(distinct id) as total_players
+	from athlete_events ae 
+	),
+total_players_per_season AS 
+	(
+	select tps.season, count(tps.id) AS 'total_players_per_season' from 
+	(
+	select
+		season 
+		,id
+	from athlete_events ae 
+	group by season, id 
+	)tps
+	group by tps.season 
+	)
+select *
+from total_players_per_season
+cross join total 
+--result: 122 323 athletes. In Winter competitions took part 17 376 athletes, while in summer 105 082 athletes.--
+
+-- 1b. How many players took part in more than 1 competition 
+select 
+	count(aa.id) as No_of_athletes_more_than_1_event 
+from
+	(
+	select id, count(year) from athlete_events ae 
+	group by id
+	having count(year) > 1
+	order by id 
+	) aa
+--result: 53009 athletes took part in more than 1 competition--
+
+
+--3. How has the percentage of female athletes changed over time?--
   
   with 
       total as
