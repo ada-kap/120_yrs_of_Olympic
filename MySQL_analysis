@@ -24,9 +24,9 @@ cross join total
 
 --result: 122 323 athletes. In Winter competitions took part 17 376 athletes, while in summer 105 082 athletes.--
 
--- 1b. How many players took part in more than 1 competition 
+-- 1b. How many players took part in more than 1 competition? --
 select 
-	count(aa.id) as No_of_athletes_more_than_1_event 
+	count(aa.id) AS No_of_athletes_more_than_1_event 
 from
 	(
 	select id, count(year) from athlete_events ae 
@@ -36,8 +36,13 @@ from
 	) aa
 --result: 53009 athletes took part in more than 1 competition--
 
---2. How many countries have participated?
+--2. How many countries have participated?--
 
+select 
+	count(distinct NOC) AS No_of_countries  
+from athlete_events ae 
+
+--result: 210 countries, with changes over time due to political factors.--
 
 
 --3. How has the percentage of female athletes changed over time?--
@@ -67,12 +72,93 @@ select
         ,COALESCE (round((f.female_ath/t.total_ath)*100, 1), 0) AS Percentage_of_female_athletes 
 from female f 
 right join total t 
-on f.year = t.year
+	on f.year = t.year
 
 --result: Results show a consistent rise in female participation: from just a few percent in the early 20th century to over 45% by 2016.--
 --insight: A clear trend toward gender equality in sports.--
 
-4. Summer vs Winter Olympics – how do they compare?
+--4. Summer vs Winter Olympics – how do they compare?--
+
+with
+total AS 
+	(
+	select
+		season 
+		,count(distinct id) AS total_players
+	from athlete_events ae 
+	group by season
+	),
+females AS 
+	(
+	select
+		season
+		,count(distinct id) AS total_women
+	from athlete_events ae 
+	where sex = 'F'
+	group by season 
+	), 
+men AS 
+	(
+	select 
+		season
+		,count(distinct id) AS total_men
+	from athlete_events ae 
+	where sex = 'M'
+	group by season
+	), 
+disciplines AS 
+	(
+	select d.season, count(d.season) AS No_of_disciplines 
+	from 
+		(
+		select season, sport
+		from athlete_events ae 
+		group by season, sport 
+		) d 
+	group by d.season 
+	),
+countries AS 
+	(
+	select c.season, count(c.NOC) AS No_of_countries 
+	from 
+		(
+		select season, NOC
+		from athlete_events ae 
+		group by season, NOC
+		) c
+	group by c.season 
+	),
+no_of_events AS 
+	( 
+	select e.season, count(e.year) AS No_of_Olimpic_games 
+	from 
+		(
+		select season, year
+		from athlete_events ae 
+		group by season, year
+		) e 
+	group by e.season 
+	)
+select 	
+	t.season				AS 'Season'
+	,noe.No_of_Olimpic_games		AS 'No_of_Olimpic_games'
+	,t.total_players			AS 'No_of_total_olimpics'		
+	,COALESCE (f.total_women, 0) 		AS 'No_of_women'
+	,m.total_men				AS 'No_of_men'
+	,dis.No_of_disciplines			AS 'No_of_disciplines'		
+	,cou.No_of_countries			AS 'No_of_countries'
+from total t
+left join females f 
+	on t.season = f.season
+left join men m 
+	on t.season = m.season
+left join disciplines dis 
+	on t.season = dis.season
+left join countries cou 
+	on t.season = cou.season 
+left join no_of_events noe 
+	on t.season = noe.season
+
 5. How many events are there?
 6. Which countries send the most athletes?
 7. Do countries with the most athletes also win the most medals?
