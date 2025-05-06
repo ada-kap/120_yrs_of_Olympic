@@ -34,8 +34,8 @@ This project demonstrates how SQL can be used to explore large historical datase
 
 📈 Future Improvements
 
-• Build an interactive dashboard (e.g., in Power BI.
+• Build an interactive dashboard in Power BI.
 
-• Integrate external data (e.g., GDP) to analyze economic impact on medal performance.
+• Integrate external data to analyze economic impact on medal performance.
 
 • Conduct biometric analysis: relationships between height/weight and specific sports disciplines.
