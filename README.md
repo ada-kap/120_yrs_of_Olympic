@@ -12,11 +12,11 @@ The goal of this project was to analyze data on participants in the Olympic Game
 
 Excel – used in initial data checks.
 
-MySQL – for querying and analysis.
+MySQL – for querying and analysis. I utilized advanced techniques like **subqueries, common table expression (CTE), window functions and aggregations.** 
 
 DBeaver – as the MySQL client.
 
-GitHub – for version control and publishing.
+GitHub – for publishing.
 
 🧠 Analytical Questions asked to the dataset
 
