@@ -1,0 +1,46 @@
+Regression Analysis: Height vs Weight
+
+As part of the biometric analysis, I examined whether a linear relationship exists between athlete height and weight using SQL-based approximations of linear regression. 
+After filtering out missing values, I calculated the slope and intercept of the best-fit line.
+
+create view widok AS 
+select *
+from athlete_events ae 
+where Height <> 'NA' and Weight <> 'NA'
+
+  with
+  average AS 
+  (
+  SELECT 
+    COUNT(*)                 AS n
+    ,(AVG(Height)            AS avg_height
+    ,(AVG(Weight)            AS avg_weight
+    ,(AVG(Height * Weight)   AS avg_hw
+    ,(AVG(Height * Height)   AS avg_h2
+  FROM widok 
+  ),
+  stats AS 
+  (
+  SELECT 
+    (AVG(Height*Weight) - AVG(Height) * AVG(Weight)) / 
+    (AVG(Height * Height) - POWER(AVG(Height), 2)) AS slope,
+    AVG(Weight) - 
+    (
+    (AVG(Height * Weight) - AVG(Height) * AVG(Weight)) / 
+    (AVG(Height * Height) - POWER(AVG(Height), 2))
+    ) * AVG(Height) AS intercept
+  FROM widok
+  )
+  SELECT * FROM stats; 
+
+/* result:
+      
+      Wynik: Weight = -104,4 + 0,99 * Height
+      
+interpretation: 
+      
+      This suggests that, on average, for each additional centimeter in height, an athlete's weight increases by approximately 0,99 kilogram. 
+The relationship is nearly linear, indicating a strong correlation between body height and weight among Olympic athletes.
+
+This regression was calculated manually in SQL using aggregate functions such as AVG, POWER, and basic formulas for slope and intercept.
+Note: The intercept value of -104,4 has no meaningful interpretation in this context, as it represents an extrapolated weight at 0 cm height.
