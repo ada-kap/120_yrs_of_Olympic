@@ -1,4 +1,4 @@
-🥇🏋️ Journey through data of 120 years of Olympic games
+**🥇🏋️ Journey through data of 120 years of Olympic games**
 
 The goal of this project was to analyze data on participants in the Olympic Games from 1896 to 2016 and answer key questions related to female participation, number of athletes, represented countries, sports disciplines, and the relationship between athlete counts and medal achievements. This project is part of my journey to becoming a professional data analyst and is part of my analytics portfolio.
 
