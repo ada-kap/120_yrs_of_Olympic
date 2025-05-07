@@ -199,13 +199,13 @@ total_medals AS
 	select ae.NOC, count(medal) AS No_of_medals
 	from athlete_events ae  
 	where medal <> 'NA'
-	group by ae.NOC
+	group by 1
 	), 
 total_athletes AS 
 	(
 	select ae.NOC, count(distinct id) AS No_athletes
 	from athlete_events ae 
-	group by ae.NOC
+	group by 1
 	)
 select 
 	tm.NOC 							AS 'NOC'
@@ -218,3 +218,5 @@ right join total_medals tm
 	on ta.NOC = tm.NOC 
 order by 3
 
+/* results: USA stays on first place in ranking of medals, as well as in ranking of athletes sent to Olympic games. In general, countries with the most athletes
+also win the most medals. Russia is an exeption - the number of the medals gives Russia second place in the ranking, while in the athletes ranking it is in 12th place. */
