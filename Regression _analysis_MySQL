@@ -1,7 +1,7 @@
 Regression Analysis: Height vs Weight
 
-As part of the biometric analysis, I examined whether a linear relationship exists between athlete height and weight using SQL-based approximations of linear regression. 
-After filtering out missing values, I calculated the slope and intercept of the best-fit line.
+/* As part of the biometric analysis, I examined whether a linear relationship exists between athlete height and weight using SQL-based approximations of linear regression. 
+After filtering out missing values, I calculated the slope and intercept of the best-fit line. */
 
 create view widok AS 
 select *
@@ -35,7 +35,7 @@ where Height <> 'NA' and Weight <> 'NA'
 
 /* result:
       
-      Wynik: Weight = -104,4 + 0,99 * Height
+      Weight = -104,4 + 0,99 * Height
       
 interpretation: 
       
@@ -43,4 +43,4 @@ interpretation:
 The relationship is nearly linear, indicating a strong correlation between body height and weight among Olympic athletes.
 
 This regression was calculated manually in SQL using aggregate functions such as AVG, POWER, and basic formulas for slope and intercept.
-Note: The intercept value of -104,4 has no meaningful interpretation in this context, as it represents an extrapolated weight at 0 cm height.
+Note: The intercept value of -104,4 has no meaningful interpretation in this context, as it represents an extrapolated weight at 0 cm height. */
